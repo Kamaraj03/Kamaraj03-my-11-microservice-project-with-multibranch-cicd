@@ -1,16 +1,17 @@
+
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: emailservice
+  name: email_service
 spec:
   selector:
     matchLabels:
-      app: emailservice
+      app: email_service
   template:
     metadata:
       labels:
-        app: emailservice
+        app: email_service
     spec:
       serviceAccountName: default
       terminationGracePeriodSeconds: 5
@@ -28,7 +29,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: adijaiswal/emailservice:latest
+        image: kamaraj03/email_service:latest
         ports:
         - containerPort: 8080
         env:
@@ -55,11 +56,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: emailservice
+  name: email_service
 spec:
   type: ClusterIP
   selector:
-    app: emailservice
+    app: email_service
   ports:
   - name: grpc
     port: 5000
@@ -68,20 +69,20 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: checkoutservice
+  name: checkout_service
 spec:
   selector:
     matchLabels:
-      app: checkoutservice
+      app: checkout_service
   template:
     metadata:
       labels:
-        app: checkoutservice
+        app: checkout_service
     spec:
       serviceAccountName: default
       containers:
         - name: server
-          image: adijaiswal/checkoutservice:latest
+          image: kamaraj03/checkout_service:latest
           ports:
           - containerPort: 5050
           readinessProbe:
@@ -94,17 +95,17 @@ spec:
           - name: PORT
             value: "5050"
           - name: PRODUCT_CATALOG_SERVICE_ADDR
-            value: "productcatalogservice:3550"
+            value: "productcatalog_service:3550"
           - name: SHIPPING_SERVICE_ADDR
-            value: "shippingservice:50051"
+            value: "shipping_service:50051"
           - name: PAYMENT_SERVICE_ADDR
-            value: "paymentservice:50051"
+            value: "payment_service:50051"
           - name: EMAIL_SERVICE_ADDR
-            value: "emailservice:5000"
+            value: "email_service:5000"
           - name: CURRENCY_SERVICE_ADDR
-            value: "currencyservice:7000"
+            value: "currency_service:7000"
           - name: CART_SERVICE_ADDR
-            value: "cartservice:7070"
+            value: "cart_service:7070"
           resources:
             requests:
               cpu: 100m
@@ -116,11 +117,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: checkoutservice
+  name: checkout_service
 spec:
   type: ClusterIP
   selector:
-    app: checkoutservice
+    app: checkout_service
   ports:
   - name: grpc
     port: 5050
@@ -129,21 +130,21 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: recommendationservice
+  name: recommendation_service
 spec:
   selector:
     matchLabels:
-      app: recommendationservice
+      app: recommendation_service
   template:
     metadata:
       labels:
-        app: recommendationservice
+        app: recommendation_service
     spec:
       serviceAccountName: default
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: adijaiswal/recommendationservice:latest
+        image: kamaraj03/recommendation_service:latest
         ports:
         - containerPort: 8080
         readinessProbe:
@@ -158,7 +159,7 @@ spec:
         - name: PORT
           value: "8080"
         - name: PRODUCT_CATALOG_SERVICE_ADDR
-          value: "productcatalogservice:3550"
+          value: "productcatalog_service:3550"
         - name: DISABLE_PROFILER
           value: "1"
         resources:
@@ -172,11 +173,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: recommendationservice
+  name: recommendation_service
 spec:
   type: ClusterIP
   selector:
-    app: recommendationservice
+    app: recommendation_service
   ports:
   - name: grpc
     port: 8080
@@ -185,22 +186,22 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend
+  name: presentation
 spec:
   selector:
     matchLabels:
-      app: frontend
+      app: presentation
   template:
     metadata:
       labels:
-        app: frontend
+        app: presentation
       annotations:
         sidecar.istio.io/rewriteAppHTTPProbers: "true"
     spec:
       serviceAccountName: default
       containers:
         - name: server
-          image: adijaiswal/frontend:latest
+          image: kamaraj03/frontend:latest
           ports:
           - containerPort: 8080
           readinessProbe:
@@ -223,19 +224,19 @@ spec:
           - name: PORT
             value: "8080"
           - name: PRODUCT_CATALOG_SERVICE_ADDR
-            value: "productcatalogservice:3550"
+            value: "productcatalog_service:3550"
           - name: CURRENCY_SERVICE_ADDR
-            value: "currencyservice:7000"
+            value: "currency_service:7000"
           - name: CART_SERVICE_ADDR
-            value: "cartservice:7070"
+            value: "cart_service:7070"
           - name: RECOMMENDATION_SERVICE_ADDR
-            value: "recommendationservice:8080"
+            value: "recommendation_service:8080"
           - name: SHIPPING_SERVICE_ADDR
-            value: "shippingservice:50051"
+            value: "shipping_service:50051"
           - name: CHECKOUT_SERVICE_ADDR
-            value: "checkoutservice:5050"
+            value: "checkout_service:5050"
           - name: AD_SERVICE_ADDR
-            value: "adservice:9555"
+            value: "ad_service:9555"
           # # ENV_PLATFORM: One of: local, gcp, aws, azure, onprem, alibaba
           # # When not set, defaults to "local" unless running in GKE, otherwies auto-sets to gcp
           # - name: ENV_PLATFORM
@@ -257,11 +258,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: frontend
+  name: presentation
 spec:
   type: NodePort
   selector:
-    app: frontend
+    app: presentation
   ports:
   - name: http
     port: 80
@@ -270,11 +271,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: frontend-external
+  name: presentation-external
 spec:
   type: LoadBalancer
   selector:
-    app: frontend
+    app: presentation
   ports:
   - name: http
     port: 80
@@ -283,21 +284,21 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: paymentservice
+  name: payment_service
 spec:
   selector:
     matchLabels:
-      app: paymentservice
+      app: payment_service
   template:
     metadata:
       labels:
-        app: paymentservice
+        app: payment_service
     spec:
       serviceAccountName: default
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: adijaiswal/paymentservice:latest
+        image: kamaraj03/payment_service:latest
         ports:
         - containerPort: 50051
         env:
@@ -322,11 +323,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: paymentservice
+  name: payment_service
 spec:
   type: ClusterIP
   selector:
-    app: paymentservice
+    app: payment_service
   ports:
   - name: grpc
     port: 50051
@@ -335,21 +336,21 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: productcatalogservice
+  name: productcatalog_service
 spec:
   selector:
     matchLabels:
-      app: productcatalogservice
+      app: productcatalog_service
   template:
     metadata:
       labels:
-        app: productcatalogservice
+        app: productcatalog_service
     spec:
       serviceAccountName: default
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: adijaiswal/productcatalogservice:latest
+        image: kamaraj03/productcatalog_service:latest
         ports:
         - containerPort: 3550
         env:
@@ -374,11 +375,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: productcatalogservice
+  name: productcatalog_service
 spec:
   type: ClusterIP
   selector:
-    app: productcatalogservice
+    app: productcatalog_service
   ports:
   - name: grpc
     port: 3550
@@ -387,21 +388,21 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cartservice
+  name: cart_service
 spec:
   selector:
     matchLabels:
-      app: cartservice
+      app: cart_service
   template:
     metadata:
       labels:
-        app: cartservice
+        app: cart_service
     spec:
       serviceAccountName: default
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: adijaiswal/cartservice:latest
+        image: kamaraj03/cart_service:latest
         ports:
         - containerPort: 7070
         env:
@@ -427,11 +428,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: cartservice
+  name: cart_service
 spec:
   type: ClusterIP
   selector:
-    app: cartservice
+    app: cart_service
   ports:
   - name: grpc
     port: 7070
@@ -440,16 +441,16 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: loadgenerator
+  name: loadgenerator_service
 spec:
   selector:
     matchLabels:
-      app: loadgenerator
+      app: loadgenerator_service
   replicas: 1
   template:
     metadata:
       labels:
-        app: loadgenerator
+        app: loadgenerator_service
       annotations:
         sidecar.istio.io/rewriteAppHTTPProbers: "true"
     spec:
@@ -465,10 +466,10 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: adijaiswal/loadgenerator:latest
+        image: kamaraj03/loadgenerator_service:latest
         env:
         - name: FRONTEND_ADDR
-          value: "frontend:80"
+          value: "presentation:80"
         - name: USERS
           value: "10"
         resources:
@@ -482,21 +483,21 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: currencyservice
+  name: currency_service
 spec:
   selector:
     matchLabels:
-      app: currencyservice
+      app: currency_service
   template:
     metadata:
       labels:
-        app: currencyservice
+        app: currency_service
     spec:
       serviceAccountName: default
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: adijaiswal/currencyservice:latest
+        image: kamaraj03/currency_service:latest
         ports:
         - name: grpc
           containerPort: 7000
@@ -522,11 +523,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: currencyservice
+  name: currency_service
 spec:
   type: ClusterIP
   selector:
-    app: currencyservice
+    app: currency_service
   ports:
   - name: grpc
     port: 7000
@@ -535,20 +536,20 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: shippingservice
+  name: shipping_service
 spec:
   selector:
     matchLabels:
-      app: shippingservice
+      app: shipping_service
   template:
     metadata:
       labels:
-        app: shippingservice
+        app: shipping_service
     spec:
       serviceAccountName: default
       containers:
       - name: server
-        image: adijaiswal/shippingservice:latest
+        image: kamaraj03/shipping_service:latest
         ports:
         - containerPort: 50051
         env:
@@ -574,11 +575,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: shippingservice
+  name: shipping_service
 spec:
   type: ClusterIP
   selector:
-    app: shippingservice
+    app: shipping_service
   ports:
   - name: grpc
     port: 50051
@@ -640,21 +641,21 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: adservice
+  name: ad_service
 spec:
   selector:
     matchLabels:
-      app: adservice
+      app: ad_service
   template:
     metadata:
       labels:
-        app: adservice
+        app: ad_service
     spec:
       serviceAccountName: default
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: adijaiswal/adservice:latest
+        image: kamaraj03/ad_service:latest
         ports:
         - containerPort: 9555
         env:
@@ -681,11 +682,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: adservice
+  name: ad_service
 spec:
   type: ClusterIP
   selector:
-    app: adservice
+    app: ad_service
   ports:
   - name: grpc
     port: 9555
