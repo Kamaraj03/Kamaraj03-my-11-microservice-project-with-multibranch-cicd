@@ -3,15 +3,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: email_service
+  name: email-service
 spec:
   selector:
     matchLabels:
-      app: email_service
+      app: email-service
   template:
     metadata:
       labels:
-        app: email_service
+        app: email-service
     spec:
       serviceAccountName: default
       terminationGracePeriodSeconds: 5
@@ -56,11 +56,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: email_service
+  name: email-service
 spec:
   type: ClusterIP
   selector:
-    app: email_service
+    app: email-service
   ports:
   - name: grpc
     port: 5000
@@ -69,15 +69,15 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: checkout_service
+  name: checkout-service
 spec:
   selector:
     matchLabels:
-      app: checkout_service
+      app: checkout-service
   template:
     metadata:
       labels:
-        app: checkout_service
+        app: checkout-service
     spec:
       serviceAccountName: default
       containers:
@@ -95,17 +95,17 @@ spec:
           - name: PORT
             value: "5050"
           - name: PRODUCT_CATALOG_SERVICE_ADDR
-            value: "productcatalog_service:3550"
+            value: "productcatalog-service:3550"
           - name: SHIPPING_SERVICE_ADDR
-            value: "shipping_service:50051"
+            value: "shipping-service:50051"
           - name: PAYMENT_SERVICE_ADDR
-            value: "payment_service:50051"
+            value: "payment-service:50051"
           - name: EMAIL_SERVICE_ADDR
-            value: "email_service:5000"
+            value: "email-service:5000"
           - name: CURRENCY_SERVICE_ADDR
-            value: "currency_service:7000"
+            value: "currency-service:7000"
           - name: CART_SERVICE_ADDR
-            value: "cart_service:7070"
+            value: "cart-service:7070"
           resources:
             requests:
               cpu: 100m
@@ -117,11 +117,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: checkout_service
+  name: checkout-service
 spec:
   type: ClusterIP
   selector:
-    app: checkout_service
+    app: checkout-service
   ports:
   - name: grpc
     port: 5050
@@ -130,15 +130,15 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: recommendation_service
+  name: recommendation-service
 spec:
   selector:
     matchLabels:
-      app: recommendation_service
+      app: recommendation-service
   template:
     metadata:
       labels:
-        app: recommendation_service
+        app: recommendation-service
     spec:
       serviceAccountName: default
       terminationGracePeriodSeconds: 5
@@ -159,7 +159,7 @@ spec:
         - name: PORT
           value: "8080"
         - name: PRODUCT_CATALOG_SERVICE_ADDR
-          value: "productcatalog_service:3550"
+          value: "productcatalog-service:3550"
         - name: DISABLE_PROFILER
           value: "1"
         resources:
@@ -173,11 +173,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: recommendation_service
+  name: recommendation-service
 spec:
   type: ClusterIP
   selector:
-    app: recommendation_service
+    app: recommendation-service
   ports:
   - name: grpc
     port: 8080
@@ -224,19 +224,19 @@ spec:
           - name: PORT
             value: "8080"
           - name: PRODUCT_CATALOG_SERVICE_ADDR
-            value: "productcatalog_service:3550"
+            value: "productcatalog-service:3550"
           - name: CURRENCY_SERVICE_ADDR
-            value: "currency_service:7000"
+            value: "currency-service:7000"
           - name: CART_SERVICE_ADDR
-            value: "cart_service:7070"
+            value: "cart-service:7070"
           - name: RECOMMENDATION_SERVICE_ADDR
-            value: "recommendation_service:8080"
+            value: "recommendation-service:8080"
           - name: SHIPPING_SERVICE_ADDR
-            value: "shipping_service:50051"
+            value: "shipping-service:50051"
           - name: CHECKOUT_SERVICE_ADDR
-            value: "checkout_service:5050"
+            value: "checkout-service:5050"
           - name: AD_SERVICE_ADDR
-            value: "ad_service:9555"
+            value: "ad-service:9555"
           # # ENV_PLATFORM: One of: local, gcp, aws, azure, onprem, alibaba
           # # When not set, defaults to "local" unless running in GKE, otherwies auto-sets to gcp
           # - name: ENV_PLATFORM
@@ -284,15 +284,15 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: payment_service
+  name: payment-service
 spec:
   selector:
     matchLabels:
-      app: payment_service
+      app: payment-service
   template:
     metadata:
       labels:
-        app: payment_service
+        app: payment-service
     spec:
       serviceAccountName: default
       terminationGracePeriodSeconds: 5
@@ -323,11 +323,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: payment_service
+  name: payment-service
 spec:
   type: ClusterIP
   selector:
-    app: payment_service
+    app: payment-service
   ports:
   - name: grpc
     port: 50051
@@ -336,15 +336,15 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: productcatalog_service
+  name: productcatalog-service
 spec:
   selector:
     matchLabels:
-      app: productcatalog_service
+      app: productcatalog-service
   template:
     metadata:
       labels:
-        app: productcatalog_service
+        app: productcatalog-service
     spec:
       serviceAccountName: default
       terminationGracePeriodSeconds: 5
@@ -375,11 +375,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: productcatalog_service
+  name: productcatalog-service
 spec:
   type: ClusterIP
   selector:
-    app: productcatalog_service
+    app: productcatalog-service
   ports:
   - name: grpc
     port: 3550
@@ -388,15 +388,15 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cart_service
+  name: cart-service
 spec:
   selector:
     matchLabels:
-      app: cart_service
+      app: cart-service
   template:
     metadata:
       labels:
-        app: cart_service
+        app: cart-service
     spec:
       serviceAccountName: default
       terminationGracePeriodSeconds: 5
@@ -428,11 +428,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: cart_service
+  name: cart-service
 spec:
   type: ClusterIP
   selector:
-    app: cart_service
+    app: cart-service
   ports:
   - name: grpc
     port: 7070
@@ -441,16 +441,16 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: loadgenerator_service
+  name: loadgenerator-service
 spec:
   selector:
     matchLabels:
-      app: loadgenerator_service
+      app: loadgenerator-service
   replicas: 1
   template:
     metadata:
       labels:
-        app: loadgenerator_service
+        app: loadgenerator-service
       annotations:
         sidecar.istio.io/rewriteAppHTTPProbers: "true"
     spec:
@@ -483,15 +483,15 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: currency_service
+  name: currency-service
 spec:
   selector:
     matchLabels:
-      app: currency_service
+      app: currency-service
   template:
     metadata:
       labels:
-        app: currency_service
+        app: currency-service
     spec:
       serviceAccountName: default
       terminationGracePeriodSeconds: 5
@@ -523,11 +523,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: currency_service
+  name: currency-service
 spec:
   type: ClusterIP
   selector:
-    app: currency_service
+    app: currency-service
   ports:
   - name: grpc
     port: 7000
@@ -536,15 +536,15 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: shipping_service
+  name: shipping-service
 spec:
   selector:
     matchLabels:
-      app: shipping_service
+      app: shipping-service
   template:
     metadata:
       labels:
-        app: shipping_service
+        app: shipping-service
     spec:
       serviceAccountName: default
       containers:
@@ -575,11 +575,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: shipping_service
+  name: shipping-service
 spec:
   type: ClusterIP
   selector:
-    app: shipping_service
+    app: shipping-service
   ports:
   - name: grpc
     port: 50051
@@ -641,15 +641,15 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ad_service
+  name: ad-service
 spec:
   selector:
     matchLabels:
-      app: ad_service
+      app: ad-service
   template:
     metadata:
       labels:
-        app: ad_service
+        app: ad-service
     spec:
       serviceAccountName: default
       terminationGracePeriodSeconds: 5
@@ -682,11 +682,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: ad_service
+  name: ad-service
 spec:
   type: ClusterIP
   selector:
-    app: ad_service
+    app: ad-service
   ports:
   - name: grpc
     port: 9555
